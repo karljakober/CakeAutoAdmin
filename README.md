@@ -1,5 +1,6 @@
 # CakeAutoAdmin plugin for CakePHP
 [![Build Status](https://travis-ci.org/KarlJakober/CakeAutoAdmin.svg)](https://travis-ci.org/KarlJakober/CakeAutoAdmin)
+[![Coverage Status](https://coveralls.io/repos/KarlJakober/CakeAutoAdmin/badge.svg)](https://coveralls.io/r/KarlJakober/CakeAutoAdmin)
 
 ## Installation
 
