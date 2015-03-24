@@ -9,8 +9,8 @@ use Cake\Network\Exception\ForbiddenException;
 use Cake\Network\Session;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
-use Cake\Utility\Inflector;
 use Cake\Utility\Hash;
+use Cake\Utility\Inflector;
 
 class AdminController extends AppController
 {
@@ -25,7 +25,7 @@ class AdminController extends AppController
      * Before Filter
      *
      * @param Event $event Instance event.
-     * @return void
+     * @return void|\Cake\Network\Response
      */
     public function beforeFilter(Event $event)
     {
@@ -42,7 +42,7 @@ class AdminController extends AppController
             if ($this->Auth->config('loginAction')) {
                 return $this->redirect($this->Auth->config('loginAction'));
             } else {
-                //TODO: Cakephp Defaults instead
+                //TO DO: Cakephp Defaults instead
                 return $this->redirect(Router::url(['controller' => 'Users', 'action' => 'login', 'plugin' => false]));
             }
         }
@@ -79,18 +79,37 @@ class AdminController extends AppController
         $this->loadComponent('Paginator');
     }
 
+    /**
+     * Dashboard
+     *
+     * First screen that is seen when an admin logs in.
+     *
+     * @return void
+     */
     public function dashboard()
     {
-
     }
 
+    /**
+     * Listing
+     *
+     * Contains paginated results for provided table.
+     *
+     * @return void
+     */
     public function listing()
     {
         $records = $this->paginate($this->table);
         $this->set(compact(['records']));
     }
 
-
+    /**
+     * Edit
+     *
+     * Auto generated form to either add or edit a record in a table.
+     *
+     * @return void
+     */
     public function edit($id = null)
     {
         //Check to ensure the model exists
@@ -123,8 +142,6 @@ class AdminController extends AppController
 
         //If post, validate table and either create or update
         if ($this->request->is('post')) {
-            pr($this->request->data);
-            exit();
             //If an id is passed, we want to make sure we are updating something that exists
             if (!empty($this->request->data[$this->table->alias()]['id']) && $this->request->data[$this->table->alias()]['id'] != $id) {
                 throw new NotFoundException('Record does not exist');
@@ -143,7 +160,7 @@ class AdminController extends AppController
                     if (array_key_exists($field, $this->table->autoAdminConfig['default'])) {
                         $data[$field] = $this->table->autoAdminConfig['default'][$field];
                     } elseif (!empty($value['default'])) {
-                         $data[$field] = $value['default'];
+                        $data[$field] = $value['default'];
                     }
                 }
                 $this->request->data = array($this->table->alias() => $data);
